@@ -1,3 +1,9 @@
+'''
+Displays a tkinter window to visualize playback of audio.
+Data is updated 10 times a second. Shows time domain and mfcc features.
+Class predictions are distributed alphabetically (buttons and image).
+'''
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib import style
 import matplotlib.pyplot as plt
@@ -16,6 +22,9 @@ style.use('ggplot')
 plt.ioff()
 
 class ThreadWithReturn(threading.Thread):
+    
+    'overridden thread class used to return value after join'
+    
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
         threading.Thread.__init__(self, group, target, name, args, kwargs)
@@ -30,6 +39,9 @@ class ThreadWithReturn(threading.Thread):
         return self._return
 
 class Audio(object):
+    
+    'audio is played back as a separate thread. a lock must be acquired for \
+    data to update to the original source managed by the tkinter window.'
     
     def __init__(self, fname, kwargs):
         
@@ -109,6 +121,8 @@ class Audio(object):
 
 class App(tk.Tk):
     
+    'main tkinter window. handles all figures and audio threads as nessesary'
+    
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.wm_title('Instrument Classifier')
@@ -155,7 +169,7 @@ class App(tk.Tk):
                 i+=1
     
     def update_canvas(self):
-        
+        'continually schedules updates to canvas based on audio state'
         self.lock.acquire()
         
         if not self.playing:
@@ -239,12 +253,14 @@ class App(tk.Tk):
         self.class_ax.imshow(X, cmap='hot', interpolation='nearest')
     
     def thread_audio(self, c):
+        'creates separate manager thread to keep track if audio is playing'
         if not self.playing:
             self.playing = True
             thread = threading.Thread(target=self.load_audio, args=(c,))
             thread.start()
     
     def load_audio(self, c):
+        'plays audio back and returns upon terminatation'
         n = np.random.randint(30)
         index = get_index[c][n]
         fname = df.loc[index, 'fname']

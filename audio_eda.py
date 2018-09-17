@@ -1,3 +1,10 @@
+'''
+Plots time domain and frequency domain for each sample class.
+Subplots for filter bank coefficents and mel frequency cepstral coefficients.
+Creates an envelope to remove audio under noise threshold.
+If clean directory is empty, preprocessed audio will be built using wavfiles.
+'''
+
 import os
 from tqdm import tqdm
 import pandas as pd

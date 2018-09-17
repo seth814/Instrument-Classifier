@@ -1,3 +1,9 @@
+'''
+Builds 1d or 2d model after envelope is created in audio_eda.
+2d is default but you can watch the 1d model train. Config.mode = 'one'.
+App will only run using mfcc so best to keep set at 'two' and 64 features.
+'''
+
 from scipy.io import wavfile
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,6 +18,7 @@ from tqdm import tqdm
 from python_speech_features import mfcc
 
 def build_mfcc(config):
+    'builds 64 mfcc features (64x9)'
     c = config
     X = []
     y = []
@@ -46,6 +53,7 @@ def build_mfcc(config):
     return X, y
 
 def build_1d(config):
+    'builds 1d data simply to show 1d convolutions are possible'
     c = config
     X = []
     y = []
