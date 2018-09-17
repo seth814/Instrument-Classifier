@@ -12,7 +12,6 @@ https://www.kaggle.com/c/freesound-audio-tagging
   - pip install python_speech_features
   - pip install tqdm
   - pip install pyaudio
-  - pip install wave
   
   A working version of tensorflow-gpu was used during testing. I'd imagine tensorflow-cpu could work just as well.
   
